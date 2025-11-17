@@ -1,0 +1,38 @@
+<%- include('partials/header') %>
+<%- include('partials/main_nav') %>
+
+<section class="py-5">
+  <div class="container">
+    <h1 class="mb-3">Contact Us</h1>
+    <p class="mb-4">Have a question, event, or custom request? Reach out and we’ll get back to you as soon as we can.</p>
+
+    <div class="row g-4">
+      <div class="col-md-6">
+        <form>
+          <div class="mb-3">
+            <label class="form-label" for="contactName">Name</label>
+            <input class="form-control" id="contactName" type="text" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="contactEmail">Email</label>
+            <input class="form-control" id="contactEmail" type="email" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="contactMessage">Message</label>
+            <textarea class="form-control" id="contactMessage" rows="4" required></textarea>
+          </div>
+          <button class="btn btn-primary" type="button" disabled>Submit (UI only for now)</button>
+          <p class="form-text mt-2">This form is visual only. Future versions can send this to the backend.</p>
+        </form>
+      </div>
+
+      <div class="col-md-6">
+        <h3>Other Ways to Reach Us</h3>
+        <p><i class="fa-solid fa-envelope me-2"></i> <a href="mailto:beliciousweets@gmail.com">beliciousweets@gmail.com</a></p>
+        <p><i class="fa-brands fa-instagram me-2"></i> <a href="https://instagram.com/beliciousweets/" target="_blank">@beliciousweets</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%- include('partials/footer') %>
