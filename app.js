@@ -4,40 +4,76 @@ const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
 const path = require('path');
 const mongoose = require('mongoose');
+const session = require('express-session');
 require('dotenv').config();
 
 // Initialize Express app
 const app = express();
 
-// Connect to MongoDB Atlas
-mongoose.connect(process.env.MONGODB_URI)
-.then(() => console.log('Connected to MongoDB Atlas'))
-.catch(err => console.error('MongoDB connection error:', err));
+// =====================
+// MongoDB Connection
+// =====================
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log('Connected to MongoDB Atlas'))
+  .catch(err => console.error('MongoDB connection error:', err));
 
-// Middleware setup
+// =====================
+// Middleware
+// =====================
 app.use(morgan('dev'));
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Set view engine and views directory
+// =====================
+// Session Setup
+// =====================
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'beliciousweets-secret',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    httpOnly: true,
+    secure: false, // must be false for localhost
+    sameSite: 'lax',
+    maxAge: 1000 * 60 * 60 * 24 // 1 day
+  }
+}));
+
+// Make currentUser available in all EJS templates
+app.use((req, res, next) => {
+  res.locals.currentUser = req.session.user || null;
+  next();
+});
+
+// =====================
+// View Engine
+// =====================
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-// Route Imports (All files from the routes directory)
+// =====================
+// Route Imports
+// =====================
 const indexRouter = require('./routes/index');
-const ordersRouter = require('./routes/orders'); // Existing
+const ordersRouter = require('./routes/orders');
 const usersRouter = require('./routes/users');
 const aboutRouter = require('./routes/about');
 const contactRouter = require('./routes/contact');
+const authRouter = require('./routes/auth'); // NEW AUTH ROUTES
 
+// =====================
 // Route Setup
-app.use('/', indexRouter); // Maps the root path (/)
-app.use('/orders', ordersRouter); // Maps /orders and sub-paths
-app.use('/users', usersRouter); // Maps /users and sub-paths
-app.use('/about', aboutRouter);    // Maps /about
-app.use('/contact', contactRouter); // Maps /contact
+// =====================
+app.use('/', authRouter);       // /login, /register, /logout
+app.use('/', indexRouter);      // homepage
+app.use('/orders', ordersRouter);
+app.use('/users', usersRouter);
+app.use('/about', aboutRouter);
+app.use('/contact', contactRouter);
 
-// Export app for server.js
+// =====================
+// Export
+// =====================
 module.exports = app;
