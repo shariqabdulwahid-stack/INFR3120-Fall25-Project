@@ -63,4 +63,4 @@ This first release focuses on core functionality and user experience, using a cl
 ---
 
 ## 💡 Inspiration
-This project was inspired by the desire to support a local home bakery and bring its warmth and creativity online. We focused on simplicity, usability, and a handcrafted feel — just like the baked goods it represents.
+This project was inspired by the desire to support a local home bakery and bring its warmth and creativity online. We focused on simplicity, usability, and a handcrafted feel, just like the baked goods it represents.
