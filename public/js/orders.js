@@ -1,85 +1,117 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const form = document.getElementById('orderForm');
-  const tableBody = document.querySelector('#ordersTable tbody');
+  const form = document.getElementById('orderForm');
+  const tableBody = document.querySelector('#ordersTable tbody');
+  const orderIdField = document.getElementById('orderId');
 
-  // Load existing orders and enable delete buttons
-  fetch('/orders/api')
-    .then(res => res.json())
-    .then(data => {
-      tableBody.innerHTML = '';
-      data.forEach((order, i) => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td>${i + 1}</td>
-          <td>${order.customerName}</td>
-          <td>${order.item}</td>
-          <td>${order.quantity}</td>
-          <td>${new Date(order.pickupDate).toLocaleDateString()}</td>
-          <td>${order.status}</td>
-                    <td><button class="btn btn-sm btn-danger delete-btn" data-id="${order._id}">Delete</button></td>
-        `;
-        tableBody.appendChild(row);
-      });
-    });
+  let ordersData = []; // Store orders for edit lookup
 
-  // Submit new order (Create functionality)
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const order = {
-      customerName: document.getElementById('customerName').value,
-      customerEmail: document.getElementById('customerEmail').value,
-      item: document.getElementById('item').value,
-      quantity: document.getElementById('quantity').value,
-      pickupDate: document.getElementById('pickupDate').value,
-      notes: document.getElementById('notes').value
-    };
+  // Load existing orders and enable buttons
+  fetch('/orders/api')
+    .then(res => res.json())
+    .then(data => {
+      ordersData = data;
+      tableBody.innerHTML = '';
+      data.forEach((order, i) => {
+        const row = document.createElement('tr');
 
-    const res = await fetch('/orders', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(order)
-    });
+        // Buttons only visible if logged in
+        const editButton = isLoggedIn
+          ? `<button class="btn btn-sm btn-warning edit-btn me-1" data-id="${order._id}">Edit</button>`
+          : '';
 
-    const result = await res.json();
-    if (res.ok) {
-      alert('✅ Order saved!');
-      location.reload();
-    } else {
-      alert('❌ Error: ' + result.error);
-    }
-  });
+        const deleteButton = isLoggedIn
+          ? `<button class="btn btn-sm btn-danger delete-btn" data-id="${order._id}">Delete</button>`
+          : '';
 
-  // Clear form
-  document.getElementById('resetFormBtn').addEventListener('click', () => {
-    form.reset();
-  });
+        row.innerHTML = `
+          <td>${i + 1}</td>
+          <td>${order.customerName}</td>
+          <td>${order.item}</td>
+          <td>${order.quantity}</td>
+          <td>${new Date(order.pickupDate).toLocaleDateString()}</td>
+          <td>${order.status}</td>
+          <td>${editButton}${deleteButton}</td>
+        `;
+        tableBody.appendChild(row);
+      });
+    });
 
-  // Handle Delete button clicks (Delete functionality)
-  tableBody.addEventListener('click', async (e) => {
-    // Check if the clicked element is a delete button
-    if (e.target.classList.contains('delete-btn')) {
-      
-      // Confirmation dialog
-      if (!confirm('Are you sure you want to delete this order?')) {
-        return;
-      }
+  // Submit new or updated order
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
 
-      // Get the order ID from the data attribute
-      const orderId = e.target.getAttribute('data-id');
-      
-      // Send DELETE request to the API
-      const res = await fetch(`/orders/${orderId}`, {
-        method: 'DELETE'
-      });
+    const order = {
+      customerName: document.getElementById('customerName').value,
+      customerEmail: document.getElementById('customerEmail').value,
+      item: document.getElementById('item').value,
+      quantity: document.getElementById('quantity').value,
+      pickupDate: document.getElementById('pickupDate').value,
+      notes: document.getElementById('notes').value
+    };
 
-      if (res.ok) {
-        alert('🗑️ Order deleted!');
-        location.reload(); // Reload to refresh the displayed table
-      } else {
-        // Try to read the error message from the response
-        const result = await res.json();
-        alert('❌ Error deleting order: ' + (result.error || res.statusText));
-      }
-    }
-  });
+    const orderId = orderIdField.value;
+    const url = orderId ? `/orders/${orderId}` : '/orders';
+    const method = orderId ? 'PUT' : 'POST';
+
+    const res = await fetch(url, {
+      method,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(order)
+    });
+
+    const result = await res.json();
+    if (res.ok) {
+      alert(orderId ? '✅ Order updated!' : '✅ Order saved!');
+      form.reset();
+      orderIdField.value = '';
+      location.reload();
+    } else {
+      alert('❌ Error: ' + result.error);
+    }
+  });
+
+  // Clear form
+  document.getElementById('resetFormBtn').addEventListener('click', () => {
+    form.reset();
+    orderIdField.value = '';
+  });
+
+  // Handle Edit and Delete button clicks
+  tableBody.addEventListener('click', async (e) => {
+    const target = e.target;
+
+    // Edit button clicked
+    if (target.classList.contains('edit-btn')) {
+      const id = target.getAttribute('data-id');
+      const order = ordersData.find(o => o._id === id);
+      if (!order) return;
+
+      // Prefill form with order data
+      document.getElementById('customerName').value = order.customerName;
+      document.getElementById('customerEmail').value = order.customerEmail;
+      document.getElementById('item').value = order.item;
+      document.getElementById('quantity').value = order.quantity;
+      document.getElementById('pickupDate').value = order.pickupDate.split('T')[0];
+      document.getElementById('notes').value = order.notes || '';
+      orderIdField.value = order._id;
+    }
+
+    // Delete button clicked
+    if (target.classList.contains('delete-btn')) {
+      if (!confirm('Are you sure you want to delete this order?')) return;
+
+      const id = target.getAttribute('data-id');
+      const res = await fetch(`/orders/${id}`, { method: 'DELETE' });
+
+      const result = await res.json();
+      if (res.ok) {
+        alert('🗑️ Order deleted!');
+        location.reload();
+      } else {
+        alert(result.error === 'You must be logged in to perform this action.'
+          ? '⚠️ You must be logged in to delete orders.'
+          : '❌ Error deleting order: ' + (result.error || res.statusText));
+      }
+    }
+  });
 });

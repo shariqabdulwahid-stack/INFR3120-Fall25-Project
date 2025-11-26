@@ -7,8 +7,7 @@ const router = express.Router();
 
 // GET Register
 router.get('/register', (req, res) => {
-  if (req.session.user) return res.redirect('/');
-  res.render('register', { title: 'Register', errors: [], data: {} });
+  res.render('register', { page: 'Register', title: 'Register', errors: [], data: {} });
 });
 
 // POST Register
@@ -24,12 +23,18 @@ router.post('/register',
     const { name, email, password } = req.body;
 
     if (!errors.isEmpty()) {
-      return res.render('register', { errors: errors.array(), data: { name, email }, title: 'Register' });
+      return res.render('register', { 
+        page: 'Register',
+        title: 'Register',
+        errors: errors.array(),
+        data: { name, email }
+      });
     }
 
     const exists = await User.findOne({ email });
     if (exists) {
-      return res.render('register', {
+      return res.render('register', { 
+        page: 'Register',
         title: 'Register',
         errors: [{ msg: 'Email already in use' }],
         data: { name, email }
@@ -40,7 +45,6 @@ router.post('/register',
     const user = await User.create({ name, email, passwordHash });
 
     req.session.user = { id: user._id, name: user.name };
-
     res.redirect('/');
   }
 );
@@ -48,7 +52,7 @@ router.post('/register',
 // GET Login
 router.get('/login', (req, res) => {
   if (req.session.user) return res.redirect('/');
-  res.render('login', { title: 'Login', errors: [], data: {} });
+  res.render('login', { page: 'Login', title: 'Login', errors: [], data: {} });
 });
 
 // POST Login
@@ -62,12 +66,18 @@ router.post('/login',
     const { email, password } = req.body;
 
     if (!errors.isEmpty()) {
-      return res.render('login', { title: 'Login', errors: errors.array(), data: { email } });
+      return res.render('login', { 
+        page: 'Login',
+        title: 'Login',
+        errors: errors.array(),
+        data: { email }
+      });
     }
 
     const user = await User.findOne({ email });
     if (!user) {
-      return res.render('login', {
+      return res.render('login', { 
+        page: 'Login',
         title: 'Login',
         errors: [{ msg: 'Invalid email or password' }],
         data: { email }
@@ -76,7 +86,8 @@ router.post('/login',
 
     const ok = await bcrypt.compare(password, user.passwordHash);
     if (!ok) {
-      return res.render('login', {
+      return res.render('login', { 
+        page: 'Login',
         title: 'Login',
         errors: [{ msg: 'Invalid email or password' }],
         data: { email }
