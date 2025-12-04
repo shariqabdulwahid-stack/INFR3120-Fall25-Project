@@ -1,0 +1,105 @@
+<%- include('partials/header') %>
+<%- include('partials/main_nav') %>
+
+<main>
+  <!-- HERO SECTION -->
+  <section class="hero-section">
+    <div class="hero-inner">
+      <!-- Text column -->
+      <div class="hero-column hero-column-text">
+        <h1 class="hero-title">
+          Fresh Homemade Baking, From Our Home to Yours
+        </h1>
+        <p class="hero-subtitle">
+          Small-batch treats made with love, creativity, and way too much butter and sugar.
+        </p>
+        <a href="/orders" class="btn btn-primary btn-lg hero-cta">
+          Place an Order
+        </a>
+      </div>
+
+      <!-- Logo column -->
+      <div class="hero-column hero-column-image">
+        <img
+          src="/images/Logo.jpg"
+          alt="Beliciousweets logo"
+          class="hero-logo-img"
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- WHAT WE OFFER SECTION -->
+  <section class="py-5 offerings-section">
+    <div class="container">
+      <h2 class="section-title text-center mb-4">What We Offer</h2>
+
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="card h-100 text-center">
+            <div class="card-body">
+              <i class="fa-solid fa-cookie-bite fa-2x mb-3"></i>
+              <h5 class="card-title">Cookies & Bars</h5>
+              <p class="card-text">
+                Perfect for study sessions, birthdays, and late-night cravings.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="card h-100 text-center">
+            <div class="card-body">
+              <i class="fa-solid fa-cake-candles fa-2x mb-3"></i>
+              <h5 class="card-title">Cakes & Cupcakes</h5>
+              <p class="card-text">
+                Custom designs for celebrations, big or small.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="card h-100 text-center">
+            <div class="card-body">
+              <i class="fa-solid fa-mug-hot fa-2x mb-3"></i>
+              <h5 class="card-title">Seasonal Specials</h5>
+              <p class="card-text">
+                Rotating menu items to match holidays and campus events.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- POLAROID GALLERY SECTION -->
+  <section class="py-5 gallery-section">
+    <div class="container">
+      <h2 class="section-title text-center mb-3">Sweet Moments</h2>
+      <p class="text-center gallery-intro mb-4">
+        A peek at some of the bakes coming out of the Beliciousweets kitchen.
+      </p>
+
+      <div class="gallery-grid">
+        <figure class="polaroid polaroid-1">
+          <img src="/images/gallery/cake.jpg" alt="Cake" />
+          <figcaption>Vintage Heart Shaped Cake</figcaption>
+        </figure>
+
+        <figure class="polaroid polaroid-2">
+          <img src="/images/gallery/cupcake.jpg" alt="Cupcakes" />
+          <figcaption>Strawberry Matcha Cupcakes</figcaption>
+        </figure>
+
+        <figure class="polaroid polaroid-3">
+          <img src="/images/gallery/chocolate.jpg" alt="Loaf cake" />
+          <figcaption>Oreo Chocolate Covered Strawberries</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+</main>
+
+<%- include('partials/footer') %>
