@@ -23,16 +23,6 @@ router.get('/about', function (req, res) {
 });
 
 /* ===========================
-   MENU PAGE
-   =========================== */
-router.get('/menu', function (req, res) {
-  res.render('menu', {
-    title: 'Menu',
-    page: 'Menu'
-  });
-});
-
-/* ===========================
    CONTACT PAGE
    =========================== */
 router.get('/contact', function (req, res) {

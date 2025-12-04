@@ -200,7 +200,8 @@ h3 {
   font-weight: 600;
   color: var(--bs-deep-purple);
 }
- /* Footer */
+
+/* ---------- Footer ---------- */
 
 .site-footer {
   background-color: #ffffff;
@@ -212,7 +213,8 @@ h3 {
 .site-footer i {
   font-size: 1.2rem;
 }
-/*Gallery (polaroid style)*/
+
+/* ---------- Gallery (polaroid style) ---------- */
 
 .gallery-section {
   background-color: #fffdf9;
@@ -267,7 +269,7 @@ h3 {
   transform: rotate(-1.5deg);
 }
 
-/* Hover effect: bring them “forward” a bit */
+/* Hover effect */
 .polaroid:hover {
   transform: rotate(0deg) translateY(-4px);
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18);
@@ -279,19 +281,20 @@ h3 {
     max-width: 90%;
   }
 }
-/* About Page Photo*/
+
+/* ---------- About Page Photo ---------- */
 
 .about-photo {
   width: 100%;
-  max-width: 260px;      
-  border-radius: 20px;    
+  max-width: 260px;
+  border-radius: 20px;
   box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
   background: #ffffff;
   padding: 6px;
-  object-fit: cover;      
+  object-fit: cover;
   object-position: center;
   margin-left: auto;
-  margin-right: auto;     
+  margin-right: auto;
 }
 
 /* Make it a BIT smaller on very large screens */

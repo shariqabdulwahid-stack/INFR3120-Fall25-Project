@@ -12,6 +12,7 @@
 
       <div class="collapse navbar-collapse" id="mainNav">
         <ul class="navbar-nav ms-auto">
+          <!-- Always visible links -->
           <li class="nav-item">
             <a class="nav-link <%= page === 'Home' ? 'active' : '' %>" href="/">Home</a>
           </li>
@@ -25,21 +26,25 @@
             <a class="nav-link <%= page === 'Contact' ? 'active' : '' %>" href="/contact">Contact</a>
           </li>
 
-          <% if (!currentUser) { %>
-            <li class="nav-item">
-              <a class="nav-link <%= page === 'Login' ? 'active' : '' %>" href="/login">Login</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link <%= page === 'Register' ? 'active' : '' %>" href="/register">Register</a>
-            </li>
-          <% } else { %>
+          <% if (currentUser) { %>
+            <!-- Logged in: show greeting + Logout -->
             <li class="nav-item d-flex align-items-center">
-              <span class="navbar-text me-2">Hi, <%= currentUser.name %></span>
+              <span class="navbar-text me-2">
+                Hi, <%= currentUser.name || currentUser.username || currentUser.email || 'User' %>
+              </span>
             </li>
             <li class="nav-item">
               <form action="/logout" method="POST" class="d-inline">
                 <button type="submit" class="btn btn-outline-danger btn-sm">Logout</button>
               </form>
+            </li>
+          <% } else { %>
+            <!-- NOT logged in: show Login + Register -->
+            <li class="nav-item">
+              <a class="nav-link <%= page === 'Login' ? 'active' : '' %>" href="/login">Login</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link <%= page === 'Register' ? 'active' : '' %>" href="/register">Register</a>
             </li>
           <% } %>
         </ul>
