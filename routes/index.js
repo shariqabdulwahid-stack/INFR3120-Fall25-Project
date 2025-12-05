@@ -8,7 +8,6 @@ router.get('/', function (req, res) {
   res.render('index', {
     title: 'Home',
     page: 'Home'
-    // currentUser comes from res.locals, do NOT override it here
   });
 });
 

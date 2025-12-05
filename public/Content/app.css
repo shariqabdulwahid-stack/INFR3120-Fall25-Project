@@ -297,7 +297,7 @@ h3 {
   margin-right: auto;
 }
 
-/* Make it a BIT smaller on very large screens */
+/* Makes it a BIT smaller on very large screens */
 @media (min-width: 992px) {
   .about-photo {
     max-width: 230px;

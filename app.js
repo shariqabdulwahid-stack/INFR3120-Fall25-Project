@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser');
 const path = require('path');
 const mongoose = require('mongoose');
 const session = require('express-session');
+const cors = require('cors');
 require('dotenv').config();
 
 // Initialize Express app
@@ -21,6 +22,19 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
+
+// CORS
+const allowedOrigins = [
+  'https://yourapp.netlify.app',
+  'https://yourapp.vercel.app',
+  'http://localhost:4200'
+];
+
+app.use(cors({
+  origin: allowedOrigins,
+  methods: ['GET','POST','PUT','DELETE'],
+  credentials: true
+}))
 
 // Session Setup
 app.use(session({

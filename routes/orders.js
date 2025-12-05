@@ -19,7 +19,6 @@ router.get('/', async (req, res) => {
 });
 
 // POST /orders → Handle form submission (Create)
-// (Decide if you want this protected or open to guests. If protected, add requireAuth)
 router.post('/', async (req, res) => {
   try {
     const { customerName, customerEmail, item, quantity, pickupDate, notes } = req.body;
