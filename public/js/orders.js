@@ -5,8 +5,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let ordersData = []; // Store orders for edit lookup
 
-  // Load existing orders and enable buttons
-  fetch('/orders/api')
+  // Load existing orders
+  fetch('/orders/api', { credentials: 'include' }) // include cookies
     .then(res => res.json())
     .then(data => {
       ordersData = data;
@@ -14,7 +14,6 @@ document.addEventListener('DOMContentLoaded', () => {
       data.forEach((order, i) => {
         const row = document.createElement('tr');
 
-        // Buttons only visible if logged in
         const editButton = isLoggedIn
           ? `<button class="btn btn-sm btn-warning edit-btn me-1" data-id="${order._id}">Edit</button>`
           : '';
@@ -29,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <td>${order.item}</td>
           <td>${order.quantity}</td>
           <td>${new Date(order.pickupDate).toLocaleDateString()}</td>
-          <td>${order.status}</td>
+          <td>${order.status || 'pending'}</td>
           <td>${editButton}${deleteButton}</td>
         `;
         tableBody.appendChild(row);
@@ -56,17 +55,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const res = await fetch(url, {
       method,
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(order)
+      body: JSON.stringify(order),
+      credentials: 'include' // include cookies
     });
 
     const result = await res.json();
     if (res.ok) {
-      alert(orderId ? '✅ Order updated!' : '✅ Order saved!');
+      alert(orderId ? 'Order updated!' : 'Order saved!');
       form.reset();
       orderIdField.value = '';
       location.reload();
     } else {
-      alert('❌ Error: ' + result.error);
+      alert('Error: ' + result.error);
     }
   });
 
@@ -86,7 +86,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const order = ordersData.find(o => o._id === id);
       if (!order) return;
 
-      // Prefill form with order data
       document.getElementById('customerName').value = order.customerName;
       document.getElementById('customerEmail').value = order.customerEmail;
       document.getElementById('item').value = order.item;
@@ -101,16 +100,19 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!confirm('Are you sure you want to delete this order?')) return;
 
       const id = target.getAttribute('data-id');
-      const res = await fetch(`/orders/${id}`, { method: 'DELETE' });
+      const res = await fetch(`/orders/${id}`, {
+        method: 'DELETE',
+        credentials: 'include' // include cookies
+      });
 
       const result = await res.json();
       if (res.ok) {
-        alert('🗑️ Order deleted!');
+        alert('Order deleted!');
         location.reload();
       } else {
         alert(result.error === 'You must be logged in to perform this action.'
-          ? '⚠️ You must be logged in to delete orders.'
-          : '❌ Error deleting order: ' + (result.error || res.statusText));
+          ? 'You must be logged in to delete orders.'
+          : 'Error deleting order: ' + (result.error || res.statusText));
       }
     }
   });

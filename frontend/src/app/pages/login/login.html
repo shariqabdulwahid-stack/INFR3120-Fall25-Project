@@ -3,24 +3,41 @@
     <div class="col-md-6">
       <h1 class="mb-4 text-center">Login</h1>
 
-      <form>
+      <!-- Error messages -->
+      <ul *ngIf="errors.length" class="text-danger">
+        <li *ngFor="let e of errors">{{ e }}</li>
+      </ul>
 
+      <!-- Angular form -->
+      <form (ngSubmit)="onLogin()" #loginForm="ngForm">
         <div class="mb-3">
           <label>Email</label>
-          <input type="email" class="form-control" required>
+          <input
+            type="email"
+            name="email"
+            [(ngModel)]="email"
+            required
+            class="form-control"
+          />
         </div>
 
         <div class="mb-3">
           <label>Password</label>
-          <input type="password" class="form-control" required>
+          <input
+            type="password"
+            name="password"
+            [(ngModel)]="password"
+            required
+            class="form-control"
+          />
         </div>
 
         <div class="d-grid">
-          <button type="submit" class="btn btn-primary">Login</button>
+          <button type="submit" class="btn btn-primary" [disabled]="!loginForm.form.valid">
+            Login
+          </button>
         </div>
-
       </form>
-
     </div>
   </div>
 </div>

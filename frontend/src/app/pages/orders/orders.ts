@@ -91,7 +91,7 @@ export class OrdersComponent implements OnInit {
           this.loading = false;
           this.resetForm();
           this.loadOrders();
-          alert('✅ Order saved!');
+          alert('Order saved!');
         },
         error: (err) => {
           console.error(err);
@@ -125,7 +125,7 @@ export class OrdersComponent implements OnInit {
     this.ordersService.deleteOrder(id).subscribe({
       next: () => {
         this.loadOrders();
-        alert('🗑️ Order deleted!');
+        alert('Order deleted!');
       },
       error: (err) => {
         console.error(err);

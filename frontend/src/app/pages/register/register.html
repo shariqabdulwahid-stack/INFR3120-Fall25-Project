@@ -3,34 +3,63 @@
     <div class="col-md-6">
       <h1 class="mb-4 text-center">Create Account</h1>
 
-      <form>
+      <!-- Error messages -->
+      <ul *ngIf="errors.length" class="text-danger">
+        <li *ngFor="let e of errors">{{ e }}</li>
+      </ul>
 
+      <!-- Angular form -->
+      <form (ngSubmit)="onRegister()" #registerForm="ngForm">
         <div class="mb-3">
           <label>Name</label>
-          <input type="text" class="form-control" required>
+          <input
+            type="text"
+            name="name"
+            [(ngModel)]="name"
+            required
+            class="form-control"
+          />
         </div>
 
         <div class="mb-3">
           <label>Email</label>
-          <input type="email" class="form-control" required>
+          <input
+            type="email"
+            name="email"
+            [(ngModel)]="email"
+            required
+            class="form-control"
+          />
         </div>
 
         <div class="mb-3">
           <label>Password</label>
-          <input type="password" class="form-control" required>
+          <input
+            type="password"
+            name="password"
+            [(ngModel)]="password"
+            required
+            class="form-control"
+          />
         </div>
 
         <div class="mb-3">
           <label>Confirm Password</label>
-          <input type="password" class="form-control" required>
+          <input
+            type="password"
+            name="confirm"
+            [(ngModel)]="confirm"
+            required
+            class="form-control"
+          />
         </div>
 
         <div class="d-grid">
-          <button type="submit" class="btn btn-success">Register</button>
+          <button type="submit" class="btn btn-success" [disabled]="!registerForm.form.valid">
+            Register
+          </button>
         </div>
-
       </form>
-
     </div>
   </div>
 </div>

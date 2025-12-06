@@ -1,79 +1,49 @@
 <section class="container py-4">
   <h1 class="mb-4">Place an Order</h1>
 
-  <form #orderForm="ngForm" (ngSubmit)="submitOrder()" class="row g-3">
-
+  <form id="orderForm" class="row g-3">
     <div class="col-md-6">
-      <label class="form-label">Customer Name</label>
-      <input [(ngModel)]="form.customerName" name="customerName"
-             type="text" class="form-control" required>
+      <label for="customerName" class="form-label">Customer Name</label>
+      <input type="text" id="customerName" class="form-control" required>
     </div>
 
     <div class="col-md-6">
-      <label class="form-label">Email</label>
-      <input [(ngModel)]="form.customerEmail" name="customerEmail"
-             type="email" class="form-control" required>
+      <label for="customerEmail" class="form-label">Email</label>
+      <input type="email" id="customerEmail" class="form-control" required>
     </div>
 
     <div class="col-md-6">
-      <label class="form-label">Item</label>
-      <input [(ngModel)]="form.item" name="item"
-             type="text" class="form-control" required>
+      <label for="item" class="form-label">Item</label>
+      <input type="text" id="item" class="form-control" placeholder="e.g. Cupcakes" required>
     </div>
 
     <div class="col-md-3">
-      <label class="form-label">Quantity</label>
-      <input [(ngModel)]="form.quantity" name="quantity"
-             type="number" min="1" class="form-control" required>
+      <label for="quantity" class="form-label">Quantity</label>
+      <input type="number" id="quantity" class="form-control" min="1" required>
     </div>
 
     <div class="col-md-3">
-      <label class="form-label">Pickup Date</label>
-      <input [(ngModel)]="form.pickupDate" name="pickupDate"
-             type="date" class="form-control" required>
+      <label for="pickupDate" class="form-label">Pickup Date</label>
+      <input type="date" id="pickupDate" class="form-control" required>
     </div>
 
     <div class="col-12">
-      <label class="form-label">Special Requests / Notes</label>
-      <textarea [(ngModel)]="form.notes" name="notes"
-                class="form-control" rows="2"></textarea>
+      <label for="notes" class="form-label">Special Requests / Notes</label>
+      <textarea id="notes" class="form-control" rows="2"></textarea>
     </div>
 
-    <button class="btn btn-primary mt-3" type="submit">
-      Save Order
-    </button>
-
-  </form>
+    <input type="hidden" id="orderId">
+    </form>
 </section>
 
 <section class="container py-4">
   <h2 class="mb-3">Active Orders</h2>
-
   <div class="table-responsive">
-    <table class="table table-striped align-middle">
+    <table class="table table-striped align-middle" id="ordersTable">
       <thead class="table-dark">
-      <tr>
-        <th>#</th><th>Customer</th><th>Item</th><th>Qty</th>
-        <th>Pickup</th><th>Status</th><th>Actions</th>
-      </tr>
+        <tr><th>#</th><th>Customer</th><th>Item</th><th>Qty</th><th>Pickup</th><th>Status</th><th>Actions</th></tr>
       </thead>
-
-      <tbody>
-        <tr *ngFor="let o of orders; index as i">
-          <td>{{ i+1 }}</td>
-          <td>{{ o.customerName }}</td>
-          <td>{{ o.item }}</td>
-          <td>{{ o.quantity }}</td>
-          <td>{{ o.pickupDate | date }}</td>
-          <td>{{ o.status }}</td>
-          <td>
-            <button class="btn btn-warning btn-sm me-1"
-                    (click)="editOrder(o)">Edit</button>
-            <button class="btn btn-danger btn-sm"
-                    (click)="deleteOrder(o._id!)">Delete</button>
-          </td>
-        </tr>
-      </tbody>
+      <tbody><!-- jQuery will insert rows here --></tbody>
     </table>
   </div>
 </section>

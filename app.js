@@ -25,16 +25,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // CORS
 const allowedOrigins = [
-  'https://yourapp.netlify.app',
-  'https://yourapp.vercel.app',
-  'http://localhost:4200'
+  'http://localhost:4200',             
 ];
 
 app.use(cors({
   origin: allowedOrigins,
-  methods: ['GET','POST','PUT','DELETE'],
   credentials: true
-}))
+}));
 
 // Session Setup
 app.use(session({
@@ -43,8 +40,8 @@ app.use(session({
   saveUninitialized: false,
   cookie: {
     httpOnly: true,
-    secure: false, // must be false for localhost
-    sameSite: 'lax',
+    secure: process.env.NODE_ENV === 'production', // true on HTTPS
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
     maxAge: 1000 * 60 * 60 * 24 // 1 day
   }
 }));
@@ -65,7 +62,7 @@ const ordersRouter = require('./routes/orders');
 const usersRouter = require('./routes/users');
 const aboutRouter = require('./routes/about');
 const contactRouter = require('./routes/contact');
-const authRouter = require('./routes/auth'); 
+const authRouter = require('./routes/auth');
 
 // Route Setup
 app.use('/', authRouter);       // /login, /register, /logout
